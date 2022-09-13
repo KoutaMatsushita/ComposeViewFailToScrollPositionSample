@@ -29,6 +29,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        supportFragmentManager.setFragmentResultListener("GO_RECYCLER_VIEW", this) { _, _ ->
+            supportFragmentManager.commit {
+                addToBackStack(null)
+                replace(view.id, RecyclerViewFragment())
+            }
+        }
+
         supportFragmentManager.setFragmentResultListener("GO_DETAIL", this) { _, _ ->
             supportFragmentManager.commit {
                 addToBackStack(null)

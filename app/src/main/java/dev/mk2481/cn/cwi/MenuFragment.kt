@@ -39,6 +39,10 @@ class MenuFragment : Fragment() {
                             text = "COMPOSE VIEW",
                             onClick = { setFragmentResult("GO_COMPOSE_VIEW", bundleOf()) }
                         )
+                        CardItem(
+                            text = "RECYCLER VIEW",
+                            onClick = { setFragmentResult("GO_RECYCLER_VIEW", bundleOf()) }
+                        )
                     }
                 }
             }
