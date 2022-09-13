@@ -1,43 +1,39 @@
 package dev.mk2481.cn.cwi
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import dev.mk2481.cn.cwi.ui.theme.CwiTheme
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.fragment.app.FragmentContainerView
+import androidx.fragment.app.commit
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+    private val fragmentContainerId = ViewCompat.generateViewId()
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
-        setContent {
-            CwiTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
+        val view = FragmentContainerView(this).apply {
+            id = fragmentContainerId
+        }
+        setContentView(view)
+
+        supportFragmentManager.commit {
+            replace(view.id, MenuFragment())
+        }
+
+        supportFragmentManager.setFragmentResultListener("GO_COMPOSE_VIEW", this) { _, _ ->
+            supportFragmentManager.commit {
+                addToBackStack(null)
+                replace(view.id, ComposeViewFragment())
             }
         }
-    }
-}
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    CwiTheme {
-        Greeting("Android")
+        supportFragmentManager.setFragmentResultListener("GO_DETAIL", this) { _, _ ->
+            supportFragmentManager.commit {
+                addToBackStack(null)
+                replace(view.id, DetailFragment())
+            }
+        }
     }
 }
